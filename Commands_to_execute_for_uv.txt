@@ -1,0 +1,5 @@
+uv init
+uv venv - this command will give you a activation path, take that as the next command
+uv add -r requirement.txt
+uv add ipykernel - To use jupyter Notebook here.
+TO run the rag model - python -m Notebook.chatbot
