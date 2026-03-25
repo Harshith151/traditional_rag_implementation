@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from .vectorstore import FaissVectorStore
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from .data_loader import load_all_documents
 
 load_dotenv()
@@ -18,9 +18,11 @@ class RAGSearch:
             self.vectorstore.build_from_documents(docs)
         else:
             self.vectorstore.load()
-        groq_api_key = "Put_your_api_key_here" #this is the api key for the groq model.
-        self.llm = ChatGroq(groq_api_key=groq_api_key, model_name=llm_model)
-        print(f"[INFO] Groq LLM initialized: {llm_model}")
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if not openai_api_key:
+            raise ValueError("OPENAI_API_KEY environment variable not set. Please add your OpenAI API key to .env file.")
+        self.llm = ChatOpenAI(api_key=openai_api_key, model_name=llm_model)
+        print(f"[INFO] OpenAI LLM initialized: {llm_model}")
 
     def search_and_summarize(self, query: str, top_k: int = 10) -> str:
         """
